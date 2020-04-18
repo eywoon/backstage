@@ -17,7 +17,7 @@
 import { rollup, watch, OutputOptions } from 'rollup';
 import conf from './rollup.config';
 import { Command } from 'commander';
-import { withCache, getDefaultCacheOptions } from 'commands/build-cache';
+import { withCache, getDefaultCacheOptions } from 'lib/buildCache';
 
 export default async (cmd: Command) => {
   if (cmd.watch) {
