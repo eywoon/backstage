@@ -16,13 +16,13 @@
 
 import React, { FC } from 'react';
 import { Button } from '@material-ui/core';
-import { errorApiRef, useApi } from '@backstage/core';
+import { alertApiRef, useApi } from '@backstage/core';
 
 const ErrorButton: FC<{}> = () => {
-  const errorApi = useApi(errorApiRef);
+  const alertApi = useApi(alertApiRef);
 
   const handleClick = () => {
-    errorApi.post(new Error('Oh no!'));
+    alertApi.post(new Error('Oh no!'), 'error');
   };
 
   return (

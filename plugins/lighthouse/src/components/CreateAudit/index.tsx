@@ -25,7 +25,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import {
-  errorApiRef,
+  alertApiRef,
   useApi,
   InfoCard,
   Header,
@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const CreateAudit: FC<{}> = () => {
-  const errorApi = useApi(errorApiRef);
+  const alertApi = useApi(alertApiRef);
   const lighthouseApi = useApi(lighthouseApiRef);
   const classes = useStyles();
   const query = useQuery();
@@ -80,7 +80,7 @@ const CreateAudit: FC<{}> = () => {
       });
       history.push('/lighthouse');
     } catch (err) {
-      errorApi.post(err);
+      alertApi.post(err, 'error');
     } finally {
       setSubmitting(false);
     }

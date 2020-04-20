@@ -18,7 +18,7 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { IconButton, Tooltip, makeStyles } from '@material-ui/core';
 import CopyIcon from '@material-ui/icons/FileCopy';
-import { errorApiRef, useApi } from 'api';
+import { alertApiRef, useApi } from 'api';
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -50,7 +50,7 @@ const CopyTextButton = ({
   tooltipText = 'Text copied to clipboard',
 }) => {
   const classes = useStyles();
-  const errorApi = useApi(errorApiRef);
+  const alertApi = useApi(alertApiRef);
   const inputRef = useRef();
   const [open, setOpen] = useState(false);
 
@@ -62,7 +62,7 @@ const CopyTextButton = ({
       inputRef.current.select();
       document.execCommand('copy');
     } catch (error) {
-      errorApi.post(error);
+      alertApi.post(error, 'error');
     }
   };
 

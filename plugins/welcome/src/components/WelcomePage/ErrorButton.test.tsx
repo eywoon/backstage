@@ -17,14 +17,14 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import ErrorButton from './ErrorButton';
-import { ApiRegistry, errorApiRef, ApiProvider } from '@backstage/core';
+import { ApiRegistry, alertApiRef, ApiProvider } from '@backstage/core';
 
 describe('ErrorButton', () => {
   it('should trigger an error', () => {
-    const errorApi = { post: jest.fn() };
+    const alertApi = { post: jest.fn() };
 
     const rendered = render(
-      <ApiProvider apis={ApiRegistry.from([[errorApiRef, errorApi]])}>
+      <ApiProvider apis={ApiRegistry.from([[alertApiRef, alertApi]])}>
         <ErrorButton />
       </ApiProvider>,
     );
@@ -32,10 +32,11 @@ describe('ErrorButton', () => {
     const button = rendered.getByText('Trigger an error!');
     expect(button).toBeInTheDocument();
 
-    expect(errorApi.post).not.toHaveBeenCalled();
+    expect(alertApi.post).not.toHaveBeenCalled();
     fireEvent.click(button);
-    expect(errorApi.post).toHaveBeenCalledWith(
+    expect(alertApi.post).toHaveBeenCalledWith(
       expect.objectContaining({ message: 'Oh no!' }),
+      'error',
     );
   });
 });

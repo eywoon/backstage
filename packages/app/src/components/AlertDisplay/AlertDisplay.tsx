@@ -18,22 +18,26 @@ import React, { FC, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Snackbar, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { Alert } from '@material-ui/lab';
-import { ErrorApi, ErrorContext } from '@backstage/core';
+import { Alert, Color } from '@material-ui/lab';
+import { AlertApi, AlertContext } from '@backstage/core';
 
 type SubscriberFunc = (error: Error) => void;
 type Unsubscribe = () => void;
 
 // TODO: figure out where to put implementations of APIs, both inside apps
 // but also in core/separate package.
-export class ErrorDisplayForwarder implements ErrorApi {
+export class AlertDisplayForwarder implements AlertApi {
   private readonly subscribers = new Set<SubscriberFunc>();
+  severity: Color = 'info';
 
-  post(error: Error, context?: ErrorContext) {
+  post(error: Error, severity?: Color, context?: AlertContext) {
     if (context?.hidden) {
       return;
     }
 
+    if (severity) {
+      this.severity = severity;
+    }
     this.subscribers.forEach(subscriber => subscriber(error));
   }
 
@@ -47,11 +51,11 @@ export class ErrorDisplayForwarder implements ErrorApi {
 }
 
 type Props = {
-  forwarder: ErrorDisplayForwarder;
+  forwarder: AlertDisplayForwarder;
 };
 
 // TODO: improve on this and promote to a shared component for use by all apps.
-const ErrorDisplay: FC<Props> = ({ forwarder }) => {
+const AlertDisplay: FC<Props> = ({ forwarder }) => {
   const [errors, setErrors] = useState<Array<Error>>([]);
 
   useEffect(() => {
@@ -85,7 +89,7 @@ const ErrorDisplay: FC<Props> = ({ forwarder }) => {
             <CloseIcon />
           </IconButton>
         }
-        severity="error"
+        severity={forwarder.severity}
       >
         {firstError.toString()}
       </Alert>
@@ -93,8 +97,8 @@ const ErrorDisplay: FC<Props> = ({ forwarder }) => {
   );
 };
 
-ErrorDisplay.propTypes = {
-  forwarder: PropTypes.instanceOf(ErrorDisplayForwarder).isRequired,
+AlertDisplay.propTypes = {
+  forwarder: PropTypes.instanceOf(AlertDisplayForwarder).isRequired,
 };
 
-export default ErrorDisplay;
+export default AlertDisplay;

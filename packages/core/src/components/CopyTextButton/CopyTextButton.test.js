@@ -18,7 +18,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { wrapInThemedTestApp } from '@backstage/test-utils';
 import CopyTextButton from './CopyTextButton';
-import { ApiRegistry, errorApiRef, ApiProvider } from 'api';
+import { ApiRegistry, alertApiRef, ApiProvider } from 'api';
 
 jest.mock('popper.js', () => {
   const PopperJS = jest.requireActual('popper.js');
@@ -39,7 +39,7 @@ const props = {
 
 const apiRegistry = ApiRegistry.from([
   [
-    errorApiRef,
+    alertApiRef,
     {
       post(error) {
         throw error;

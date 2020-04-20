@@ -16,7 +16,7 @@
 
 import React from 'react';
 import CopyTextButton from '.';
-import { ApiProvider, errorApiRef, ApiRegistry } from 'api';
+import { ApiProvider, alertApiRef, ApiRegistry } from 'api';
 
 export default {
   title: 'CopyTextButton',
@@ -26,7 +26,7 @@ export default {
       // TODO: move this to common storybook config, requires core package to be separate from components
       const registry = ApiRegistry.from([
         [
-          errorApiRef,
+          alertApiRef,
           {
             post(error) {
               // eslint-disable-next-line no-alert

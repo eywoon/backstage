@@ -32,8 +32,8 @@ import { MemoryRouter } from 'react-router-dom';
 import {
   ApiRegistry,
   ApiProvider,
-  ErrorApi,
-  errorApiRef,
+  AlertApi,
+  alertApiRef,
 } from '@backstage/core';
 import { wrapInThemedTestApp, wrapInTheme } from '@backstage/test-utils';
 
@@ -49,13 +49,13 @@ const createAuditResponse = data as Audit;
 // TODO add act() to these tests without breaking them!
 describe('CreateAudit', () => {
   let apis: ApiRegistry;
-  let errorApi: ErrorApi;
+  let alertApi: AlertApi;
 
   beforeEach(() => {
-    errorApi = { post: jest.fn() };
+    alertApi = { post: jest.fn() };
     apis = ApiRegistry.from([
       [lighthouseApiRef, new LighthouseRestApi('http://lighthouse')],
-      [errorApiRef, errorApi],
+      [alertApiRef, alertApi],
     ]);
   });
 
@@ -147,7 +147,7 @@ describe('CreateAudit', () => {
 
   describe('when the audits fail', () => {
     it('should render an error', async () => {
-      (errorApi.post as jest.Mock).mockClear();
+      (alertApi.post as jest.Mock).mockClear();
       mockFetch.mockRejectOnce(new Error('failed to post'));
 
       const rendered = render(
@@ -166,7 +166,7 @@ describe('CreateAudit', () => {
       await wait(() => expect(rendered.getByLabelText(/URL/)).toBeEnabled());
       await new Promise(r => setTimeout(r, 0));
 
-      expect(errorApi.post).toHaveBeenCalledWith(expect.any(Error));
+      expect(alertApi.post).toHaveBeenCalledWith(expect.any(Error), 'error');
     });
   });
 });

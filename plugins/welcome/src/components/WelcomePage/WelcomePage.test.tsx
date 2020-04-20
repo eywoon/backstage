@@ -19,14 +19,14 @@ import { render } from '@testing-library/react';
 import WelcomePage from './WelcomePage';
 import { ThemeProvider } from '@material-ui/core';
 import { lightTheme } from '@backstage/theme';
-import { ApiProvider, ApiRegistry, errorApiRef } from '@backstage/core';
+import { ApiProvider, ApiRegistry, alertApiRef } from '@backstage/core';
 
 describe('WelcomePage', () => {
   it('should render', () => {
     // TODO: use common test app with mock implementations of all core APIs
     const rendered = render(
       <ApiProvider
-        apis={ApiRegistry.from([[errorApiRef, { post: jest.fn() }]])}
+        apis={ApiRegistry.from([[alertApiRef, { post: jest.fn() }]])}
       >
         <ThemeProvider theme={lightTheme}>
           <WelcomePage />
